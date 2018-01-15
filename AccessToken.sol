@@ -32,7 +32,7 @@ bool flag;
 
 //one to one mapping , this is not suitable for number of permissible key are distributed to n>1
 //List of secondary owner address - which make the list of permissiable address  index as asset key 
-   mapping(bytes32=>address)public  ListOfSecOwnAdd;
+   mapping(bytes32=>mapping(address=>bool))public  ListOfSecOwnAdd;
 
    //mapping address of UserTokenContainer with the corrosponding data 
    //this is used for register asset with its corrosponding data
@@ -119,7 +119,7 @@ sowl[_owner_address][_secowner_address].assetKey=_assetkey;
 //for this individual asset there must be in and out scope .
 sowl[_owner_address][_secowner_address].flag=true;
 
-ListOfSecOwnAdd[_assetkey]=_secowner_address;
+ListOfSecOwnAdd[_assetkey][_secowner_address]=true;
 
 //event for success
 AssetPermissiable(_owner_address, _secowner_address, _assetkey,true);
@@ -154,12 +154,10 @@ function getAsset(bytes32 _assetkey)public returns(bool) {
 //msg.sender has permission to read.     
 if(utc[msg.sender][_assetkey].assetKey != _assetkey){
 
-/*
-here we used data as one is to one mapping 
-(assetKey,msg.sender)->(1,1)
-*/
-assert(ListOfSecOwnAdd[_assetkey] == msg.sender);
- //TODO:  (assetKey,msg.sender)->(n,n)   
+   //(assetKey,msg.sender)->(n,n) . 
+   //number of assetkey have number of secondry address.
+   //if true then it means that, asset  have permissoin to see by the requester.
+assert(ListOfSecOwnAdd[_assetkey][msg.sender] == true);
  
 }    
 GetAssetDone(msg.sender,_assetkey);
