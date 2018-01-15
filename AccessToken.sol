@@ -75,7 +75,8 @@ Checks to see if caller is owner of asset
 if owner then registers the asset associated with owner name
 returns true for success or false for failure
  */
-function registerAsset (bytes32 _assetkey, bool _flag) public constant  returns (bool){
+ //send falg as false as parameter using web3js 
+function registerAsset (bytes32 _assetkey, bool _flag) public  returns (bool){
 
 utc[msg.sender][_assetkey].owner = msg.sender;
 
@@ -144,7 +145,8 @@ assert(sowl[_owner_address][_secowner_address].flag);
 
 //set flag to false
 sowl[_owner_address][_secowner_address].flag=false;
-
+//TODO: set bool to false for ListOfSecOwnAddr[][] . It means that assetkey and _secOwn_address has no any match.
+ListOfSecOwnAdd[_assetkey][_secowner_address] == false;
 DeleteAcessSucceed(_owner_address,_secowner_address,_assetkey);
  }
 
