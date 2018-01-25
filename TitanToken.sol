@@ -42,7 +42,10 @@ contract TitanToken{
     uint256 public totalSupply;
 
     // This creates an array with all balances
-    mapping (address => uint256) public balanceOf;
+    mapping (
+        address => uint256
+        ) public balanceOf;
+        
     mapping (
         address => mapping (
             address => uint256
@@ -51,10 +54,9 @@ contract TitanToken{
 
     // This generates a public event on the blockchain that will notify clients
     event Transfer(address indexed from, address indexed to, uint256 value);
-
-    // This notifies clients about the amount burnt
-    event Burn(address indexed from, uint256 value);
-
+    event Eventexchangeto(bytes32,bytes32,uint256);
+    event Eventexchangefrom(bytes32,bytes32,uint256);
+    
     /**
      * Constrctor function
      *
@@ -149,36 +151,24 @@ contract TitanToken{
         }
     }
 
-    /**
-     * Destroy tokens
-     *
-     * Remove `_value` tokens from the system irreversibly
-     *
-     * @param _value the amount of money to burn
-     */
-    function burn(uint256 _value) public returns (bool success) {
-        require(balanceOf[msg.sender] >= _value);   // Check if the sender has enough
-        balanceOf[msg.sender] -= _value;            // Subtract from the sender
-        totalSupply -= _value;                      // Updates totalSupply
-        Burn(msg.sender, _value);
-        return true;
+    function exchangeTo(uint256 _value){
+        balanceOf[msg.sender] += _value;
+        Eventexchangeto(name,symbol,_value);
+        
     }
+    function exchangeFrom(uint256 _value){
+    balanceOf[msg.sender] -= _value;  
+     Eventexchangefrom(name,symbol,_value);
+    }
+}
 
-    /**
-     * Destroy tokens from other account
-     *
-     * Remove `_value` tokens from the system irreversibly on behalf of `_from`.
-     *
-     * @param _from the address of the sender
-     * @param _value the amount of money to burn
-     */
-    function burnFrom(address _from, uint256 _value) public returns (bool success) {
-        require(balanceOf[_from] >= _value);                // Check if the targeted balance is enough
-        require(_value <= allowance[_from][msg.sender]);    // Check allowance
-        balanceOf[_from] -= _value;                         // Subtract from the targeted balance
-        allowance[_from][msg.sender] -= _value;             // Subtract from the sender's allowance
-        totalSupply -= _value;                              // Update totalSupply
-        Burn(_from, _value);
-        return true;
+contract ExchangeToken{
+    function ExchangeToken(){}
+    //used for testing purpose 
+    uint public constant factor = 10 ;
+    //assumed that both token exist for that wallet . To check, use web3js
+    function exchange( uint256 _value)public returns(uint256){
+    //passes the value of token from which we are exchanging to another token vaue . exchanged value is returned 
+    return _value *= factor;
     }
 }
