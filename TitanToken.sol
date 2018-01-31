@@ -1,37 +1,4 @@
 pragma solidity ^0.4.19;
-
-interface tokenRecipient {function receiveApproval(address _from, uint256 _value, address _token, bytes _extraData) public;}
-
-contract SuperTitan{
-    //this is only for testing purpose 
-    address public addr ;
-    //List of Token name associated with its contract address.
-    mapping(
-        address => bytes32
-        ) public TokenList;
-    event TokenAddedToTitan(address, bytes32);
-    
-    //add new token in the list of token types 
-    function addToken(address _tokenaddress, bytes32 _tokenname)internal {
-        //check if token name already exist with its contract address. 
-        assert(!(TokenList[_tokenaddress] == _tokenname));
-        TokenList[_tokenaddress] = _tokenname;
-        //Event for addToken 
-        TokenAddedToTitan(_tokenaddress, _tokenname);
-    }
-    
-    //Generating new Token . 
-    function newToken(uint256 _initialSupply, bytes32 _name, bytes32 symbol)
-    public
-    returns(address, bytes32){
-        TitanToken T = new TitanToken(_initialSupply,_name,symbol);
-        addToken(T, _name);
-        //used for testing purpose
-        addr = T;
-        return (T, _name);
-    }
-}
-
 //This contract is Titan Factory templete derivative of ERC20 standard .
 contract TitanToken{ 
     // Public variables of the token
@@ -117,58 +84,14 @@ contract TitanToken{
         _transfer(_from, _to, _value);
         return true;
     }
-
-    /**
-     * Set allowance for other address
-     *
-     * Allows `_spender` to spend no more than `_value` tokens on your behalf
-     *
-     * @param _spender The address authorized to spend
-     * @param _value the max amount they can spend
-     */
-    function approve(address _spender, uint256 _value) public
-        returns (bool success) {
-        allowance[msg.sender][_spender] = _value;
-        return true;
-    }
-
-    /**
-     * Set allowance for other address and notify
-     *
-     * Allows `_spender` to spend no more than `_value` tokens on your behalf, and then ping the contract about it
-     *
-     * @param _spender The address authorized to spend
-     * @param _value the max amount they can spend
-     * @param _extraData some extra information to send to the approved contract
-     */
-    function approveAndCall(address _spender, uint256 _value, bytes _extraData)
-        public
-        returns (bool success) {
-        tokenRecipient spender = tokenRecipient(_spender);
-        if (approve(_spender, _value)) {
-            spender.receiveApproval(msg.sender, _value, this, _extraData);
-            return true;
-        }
-    }
-
-    function exchangeTo(uint256 _value){
+    function exchangeTo(uint256 _value private ){
         balanceOf[msg.sender] += _value;
         Eventexchangeto(name,symbol,_value);
         
     }
-    function exchangeFrom(uint256 _value){
+    function exchangeFrom(uint256 _value) private{
     balanceOf[msg.sender] -= _value;  
      Eventexchangefrom(name,symbol,_value);
     }
 }
 
-contract ExchangeToken{
-    function ExchangeToken(){}
-    //used for testing purpose 
-    uint public constant factor = 10 ;
-    //assumed that both token exist for that wallet . To check, use web3js
-    function exchange( uint256 _value)public returns(uint256){
-    //passes the value of token from which we are exchanging to another token vaue . exchanged value is returned 
-    return _value *= factor;
-    }
-}
