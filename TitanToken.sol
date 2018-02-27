@@ -84,14 +84,15 @@ contract TitanToken{
         _transfer(_from, _to, _value);
         return true;
     }
-    function exchangeTo(uint256 _value private ){
+    function exchangeTo(uint256 _value  )private{
         balanceOf[msg.sender] += _value;
         Eventexchangeto(name,symbol,_value);
         
     }
-    function exchangeFrom(uint256 _value) private{
+    function exchangeFrom(uint256 _value) private returns(uint256) {
     balanceOf[msg.sender] -= _value;  
      Eventexchangefrom(name,symbol,_value);
+     return _value;
     }
 }
 
