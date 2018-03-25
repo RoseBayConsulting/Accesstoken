@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity 0.4.21;
 contract TitanToken{ 
     // Public variables of the token
     bytes32 public name;
@@ -22,11 +22,11 @@ contract TitanToken{
            bytes32 => TokenBucket
            )) public ontokenbucket;
        
-    event UserRegisteredLog(address,bytes32,bytes32,uint256);
+    event UserRegisteredLog(bool);
 
     // This generates a public event on the blockchain that will notify clients
     event TransferLog(address from, address to, uint256 value);
-   event InitialRegLog(address, bytes32, bytes32, uint, bool, bool);
+   event InitialRegLog(bool);
     
     /**
      * Constrctor function
@@ -39,12 +39,12 @@ contract TitanToken{
         symbol = _tokenSymbol;                               // Set the symbol for display purposes
         
         
-      //  ontokenbucket[msg.sender][_tokenName].Address = msg.sender;
-    //    ontokenbucket[msg.sender][_tokenName].Name = _tokenName;
-     //   ontokenbucket[msg.sender][_tokenName].Symbol = _tokenSymbol;
-      //  ontokenbucket[msg.sender][_tokenName].Currentholdings = totalSupply;
-      //  ontokenbucket[msg.sender][_tokenName].Userstatus = false;
-        //ontokenbucket[msg.sender][_tokenName].Merchantstatus = true;
+     //  ontokenbucket[msg.sender][_tokenName].Address = msg.sender;
+     //  ontokenbucket[msg.sender][_tokenName].Name = _tokenName;
+     //  ontokenbucket[msg.sender][_tokenName].Symbol = _tokenSymbol;
+     //  ontokenbucket[msg.sender][_tokenName].Currentholdings = totalSupply;
+     //  ontokenbucket[msg.sender][_tokenName].Userstatus = false;
+     //ontokenbucket[msg.sender][_tokenName].Merchantstatus = true;
         
         initialReg(_tokenName);
     }
@@ -56,16 +56,7 @@ contract TitanToken{
         ontokenbucket[msg.sender][_tokenName].Currentholdings = totalSupply;
         ontokenbucket[msg.sender][_tokenName].Userstatus = false;
         ontokenbucket[msg.sender][_tokenName].Merchantstatus = true;
-        emit InitialRegLog(
-        ontokenbucket[msg.sender][_tokenName].Address,
-        ontokenbucket[msg.sender][_tokenName].Name,
-        ontokenbucket[msg.sender][_tokenName].Symbol,
-        ontokenbucket[msg.sender][_tokenName].Currentholdings,
-        ontokenbucket[msg.sender][_tokenName].Userstatus,
-        ontokenbucket[msg.sender][_tokenName].Merchantstatus
-            
-            );
-    
+        emit InitialRegLog(ontokenbucket[msg.sender][_tokenName].Merchantstatus);
     }    
     
         
@@ -78,7 +69,7 @@ contract TitanToken{
         ontokenbucket[msg.sender][_tokenName].Userstatus = true;
         ontokenbucket[msg.sender][_tokenName].Merchantstatus=false;
         
-       emit UserRegisteredLog(msg.sender, _tokenName, _tokenSymbol, ontokenbucket[msg.sender][_tokenName].Currentholdings);
+       emit UserRegisteredLog(ontokenbucket[msg.sender][_tokenName].Userstatus);
    }
   
   
@@ -151,4 +142,3 @@ contract TitanToken{
         
     }
 }
-

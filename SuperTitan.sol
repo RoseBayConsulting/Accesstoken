@@ -1,4 +1,5 @@
-pragma solidity ^0.4.19;
+pragma solidity 0.4.21;
+
 import "./TitanToken.sol";
 /*Implements token factory 
 */
@@ -22,7 +23,7 @@ contract SuperTitan{
    
         
     //superowner is the address  who can deploy the contract 
-    address superowner;
+    //address superowner;
     modifier check_registered(bytes32 _tokenname, bytes32 _symbol){
         for(uint i=0; i<counter; i++){
         assert(!(tokendetails[counter].name == _tokenname));
@@ -91,4 +92,5 @@ contract SuperTitan{
         return (T, _name);
     }
 }
+
 

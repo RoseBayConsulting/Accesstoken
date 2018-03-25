@@ -1,6 +1,8 @@
-pragma solidity ^0.4.19;
+pragma solidity 0.4.21;
 import "./SuperTitan.sol";
 import "./TitanToken.sol";
+
+
 contract TokenTrade is SuperTitan{
   
     //Trade function is used to trade form one token types to another one .
@@ -37,3 +39,4 @@ contract TokenTrade is SuperTitan{
     }
     
 }
+
